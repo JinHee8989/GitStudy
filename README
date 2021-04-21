@@ -56,4 +56,95 @@ $ git commit -m 'initial project version'
  
 
 
+2)기존 저장소를 clone하기 (git clone <url> 명령)
+$ git clone https://github.com/libgit2/libgit2
+
+3)기존 저장소에 프로젝트 올리기
+>> git init
+>> git add .
+>> git commit -m "first commit"
+>> git remote add origin <<repository url>>.git
+>> git push origin master
+>> git id/password 입력
+
+4. 수정하고 저장소에 저장하기  - 스냅샷찍고 싶을 때 커밋을 한다.  - 워킹 디렉토리는 크게 Tracked(관리대상)과  Untracked(관리대상 아님)으로 나뉨.
+		_ Tracked = 스냅샷에 포함된 파일로 git이 알고 있는 파일이다. 상태는 Unmodified(수정하지 않음)와 Modified(수정함) 그리고 Staged(커밋으로 저장소에 기록할)로 나뉜다.
+				  =  Unmodified(수정하지 않음) -> Modified(수정함) -> Staged(커밋으로 저장소에 기록할 예정) -> commit
+
+	-$ git status :  파일의 상태 확인 (변경됐다는 정도만 확인가능)  	-$ git diff : 파일 상태확인 (변경된 내용 보여줌, 단 unstaged 상태인것만 확인 가능)
+	-$ git diff —staged : staged 상태의 변경된파일 내용확인가능
+
+	-$ echo ‘ (프로젝트명) ‘ > README : readMe 파일 만들기 -> 파일만 만들면 git add하기전엔 untracked 상태임 -> $git add READMD 해줘야 git이 인식함
+
+ 	- $ git commit -m “(쓸 내용 쓰기)” : git add로 모두 staged 상태로 들어가면 커밋을 해줌
+	- $ git commit -a -m “(쓸 내용 쓰기)” : staging Area를 생략하고 커밋할때 -a 옵션으로 커밋해줌
+
+	- $ git rm : Tracked 상태의 파일을 삭제한 후에(정확하게는 Staging Area에서 삭제하는 것) 커밋해야함 —>파일삭제
+	- $ git mv : 파일 이동  (하단의 명령어3개를한것과 같음)
+		$ mv README.md README
+		$ git rm README.md
+		$ git add README
+
+5.   커밋 히스토리 조회하기  - $ git log : 전체 로그 조회  - $ git log —patch :  각 커밋의 diff 결과알려줌  - $ git log -숫자 : 최근 숫자만큼의 결과만 보여줌 - $ git log —stat : 각 커밋의 통계 정보를 조회 - $ git log —pretty=oneline : 각 커밋을 1줄로 보여줌 - $ git log —pretty=forma:"%h - %an, %ar : %s"  :   나만의 포맷으로 커밋을 출력하고 싶을때 사용  - $ git log —graph : 브랜치와 머지 히스토리 정보까지 아스키그래프로 보여줌  
+표 1. git log --pretty=format 에 쓸 몇가지 유용한 옵션
+옵션	설명
+%H	커밋 해시
+%h	짧은 길이 커밋 해시
+%T	트리 해시
+%t	짧은 길이 트리 해시
+%P	부모 해시
+%p	짧은 길이 부모 해시
+%an	저자 이름
+%ae	저자 메일
+%ad	저자 시각 (형식은 –-date=옵션 참고)
+%ar	저자 상대적 시각
+%cn	커미터 이름
+%ce	커미터 메일
+%cd	커미터 시각
+%cr	커미터 상대적 시각
+%s	요약
+
+표 2. git log 주요 옵션
+옵션	설명
+-p	각 커밋에 적용된 패치를 보여준다.
+--stat	각 커밋에서 수정된 파일의 통계정보를 보여준다.
+--shortstat	--stat 명령의 결과 중에서 수정한 파일, 추가된 라인, 삭제된 라인만 보여준다.
+--name-only	커밋 정보중에서 수정된 파일의 목록만 보여준다.
+--name-status	수정된 파일의 목록을 보여줄 뿐만 아니라 파일을 추가한 것인지, 수정한 것인지, 삭제한 것인지도 보여준다.
+--abbrev-commit	40자 짜리 SHA-1 체크섬을 전부 보여주는 것이 아니라 처음 몇 자만 보여준다.
+--relative-date	정확한 시간을 보여주는 것이 아니라 “2 weeks ago” 처럼 상대적인 형식으로 보여준다.
+--graph	브랜치와 머지 히스토리 정보까지 아스키 그래프로 보여준다.
+--pretty	지정한 형식으로 보여준다. 이 옵션에는 oneline, short, full, fuller, format이 있다. format은 원하는 형식으로 출력하고자 할 때 사용한다.
+--oneline	--pretty=oneline --abbrev-commit 두 옵션을 함께 사용한 것과 같다.
+
+	-$ git log —since=2.weeks :  —since는 조회제한조건이다. 이 명령어는 지난 2주동안 만들어진 커밋들만 조회한다.
+
+표 3. git log 조회 범위를 제한하는 옵션
+옵션	설명
+-(n)	최근 n 개의 커밋만 조회한다.
+--since, --after	명시한 날짜 이후의 커밋만 검색한다.
+--until, --before	명시한 날짜 이전의 커밋만 조회한다.
+--author	입력한 저자의 커밋만 보여준다.
+--committer	입력한 커미터의 커밋만 보여준다.
+--grep	커밋 메시지 안의 텍스트를 검색한다.
+-S	커밋 변경(추가/삭제) 내용 안의 텍스트를 검색한다.
+
+6. 되돌리기  - $ git commit —amend : 완료된 커밋을 다시 커밋하고 싶을때 씀 (기존의 커밋을 덮어쓰게됨)
+
+ 7. 리모트 저장소
+	- $ git remote : 현재 프로젝트에 등록된 리모트 저장소 단축이름을 확인
+	- $ git remote -v : 현재 프로젝트에 등록된 리모트 저장소 단축이름과 URL을 함께 볼수 있음, 리모트 저장소가 여러개있으면 등록된 전부를 보여줌.
+	- $ git remote add <단축이름> <url> :  리모트 저장소를 추가 (이 브랜치를 로컬 브랜치중 하나에 Merge 하거나 Checkout 해서 브랜치 내용을 자세히 확인할 수 있다.)
+	- $ git fetch <remote> : 로컬에는 없지만 원격 저장소에 있는 데이터를 가져옴 (로컬 브랜치와 merge X)
+	- $ git pull : 원격저장소에 있는 데이터와 로컬 데이터를 merge O
+ 	- $ git push<원격저장소 이름><브랜치명> : 원격저장소에 프로젝트 공유
+  	- $ git remote show <원격저장소 이름>: 원격저장소의 구체적인 정보 확인(url, 브랜치들 등)
+	- $ git remote rename <원래 원격저장소이름> <바꿀원격저장소 이름> : 원격저장소의 이름 바꾸기
+	- $ git remote remove <원격저장소이름> : 원격저장소 삭제
+	- $ git tag -a <태그명 (ex)v1.4> -m <태그내용>  :   Annotated태그로 git 데이터베이스에 태그를 만든사람의 이름, 이메일과 태그만든날짜, 태그메시지도 저장한다. 태그간 코드의 차이점을 비교할 수 있다.
+	- $ git push origin <태그명> : 태그 공유하기,  git push는 자동으로 원격서버에 태그를 전송하지 않아서 이렇게 따로 해줘야함
+	- $ git checkout <태그명> : 태그를 checkout 하기
+
+8. Git alias - $ git config --global alias.co checkout : checkout 대신 co 쓰겠다는것 (예로들면 commit 대신 co를 쓸수있으므로 git co -m “커밋과 같은 효과”)
+
 
